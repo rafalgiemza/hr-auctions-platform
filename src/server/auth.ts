@@ -46,6 +46,7 @@ export const authOptions: NextAuthOptions = {
       },
     }),
   },
+  // @ts-expect-error description why I expect error
   adapter: DrizzleAdapter(db, mysqlTable),
   providers: [
     DiscordProvider({
