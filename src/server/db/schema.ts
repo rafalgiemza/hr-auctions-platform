@@ -1,6 +1,7 @@
 import { relations, sql } from "drizzle-orm";
 import {
   bigint,
+  boolean,
   index,
   int,
   mysqlTableCreator,
@@ -24,19 +25,21 @@ export const posts = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     name: varchar("name", { length: 256 }),
-    createdById: varchar("createdById", { length: 255 }).notNull(),
+    authorId: varchar("authorId", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)
       .notNull(),
     updatedAt: timestamp("updatedAt").onUpdateNow(),
   },
   (example) => ({
-    createdByIdIdx: index("createdById_idx").on(example.createdById),
+    authorIdIdx: index("authorId_idx").on(example.authorId),
     nameIndex: index("name_idx").on(example.name),
   })
 );
 
-export const users = mysqlTable("user", {
+export const users = mysqlTable(
+  "user", 
+{
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
@@ -50,6 +53,9 @@ export const users = mysqlTable("user", {
 export const usersRelations = relations(users, ({ many }) => ({
   accounts: many(accounts),
   sessions: many(sessions),
+  candidateProfiles: many(candidateProfiles),
+  recruiterProfiles: many(recruiterProfiles),
+  auctions: many(auctions),
 }));
 
 export const accounts = mysqlTable(
@@ -97,6 +103,40 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
+export const candidateProfiles = mysqlTable(
+  "candidateProfile",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    userId: varchar("userId", { length: 255 }).notNull(),
+    description: text('description'),
+  },
+  (candidateProfile) => ({
+    userIdIdx: index("userId_idx").on(candidateProfile.userId),
+  })
+)
+
+export const candidateProfilesRelations = relations(candidateProfiles, ({ one }) => ({
+  user: one(users, { fields: [candidateProfiles.userId], references: [users.id] }),
+}))
+
+export const recruiterProfiles = mysqlTable(
+  "recruiterProfile",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    userId: varchar("userId", { length: 255 }).notNull(),
+    description: text('description'),
+    company: varchar("profile_type", { length: 256 }),
+    verified: boolean('verified'),
+  },
+  (recruiterProfile) => ({
+    userIdIdx: index("userId_idx").on(recruiterProfile.userId),
+  })
+)
+
+export const recruiterProfilesRelations = relations(recruiterProfiles, ({ one }) => ({
+  user: one(users, { fields: [recruiterProfiles.userId], references: [users.id] }),
+}))
+
 export const verificationTokens = mysqlTable(
   "verificationToken",
   {
@@ -108,3 +148,55 @@ export const verificationTokens = mysqlTable(
     compoundKey: primaryKey(vt.identifier, vt.token),
   })
 );
+
+export const auctions = mysqlTable(
+  "auction",
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    title: varchar("title", { length: 256 }),
+    description: text('description'),
+    price: int('price'),
+    priceUnit: varchar("name", { length: 256 }),
+    authorId: varchar("authorId", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (auction) => ({
+    authorIdIdx: index("authorId_idx").on(auction.authorId),
+    titleIndex: index("name_idx").on(auction.title),
+  })
+);
+
+export const auctionsRelations = relations(auctions, ({ one }) => ({
+  user: one(users, { fields: [auctions.authorId], references: [users.id] }),
+}))
+
+export const offers = mysqlTable(
+  "offer", 
+  {
+    id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
+    auctionId: varchar("auctionId", { length: 255 }).notNull(),
+    title: varchar("title", { length: 256 }),
+    description: text('description'),
+    price: int('price'),
+    priceUnit: varchar("name", { length: 256 }),
+    authorId: varchar("authorId", { length: 255 }).notNull(),
+    createdAt: timestamp("created_at")
+      .default(sql`CURRENT_TIMESTAMP`)
+      .notNull(),
+    updatedAt: timestamp("updatedAt").onUpdateNow(),
+  },
+  (offer) => ({
+    auctionIdIdx: index("auctionId_idx").on(offer.auctionId),
+    authorIdIdx: index("authorId_idx").on(offer.authorId),
+    createdAtIdx: index("createdAt_idx").on(offer.createdAt),
+  })
+)
+
+export const offersRelations = relations(offers, ({ one }) => ({
+  auction: one(auctions, { fields: [offers.auctionId],  references: [auctions.id]}),
+  author: one(users, { fields: [offers.authorId], references: [users.id]})
+}))
+
