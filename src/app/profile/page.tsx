@@ -1,5 +1,5 @@
-import { CreateCandidateProfile } from "~/components/main/profile/candidate/create-profile";
-import { CreateRecruiterProfile } from "~/components/main/profile/recruiter/create-profile";
+import { CreateCandidateProfile } from "~/components/forms/profile/candidate/create-profile";
+import { CreateRecruiterProfile } from "~/components/forms/profile/recruiter/create-profile";
 
 export default async function Home() {
   return (

@@ -1,4 +1,4 @@
-import { CreateOffer } from "~/components/main/offer/create-offer";
+import { CreateOffer } from "~/components/forms/offer/create-offer";
 import { api } from "~/trpc/server";
 
 export default async function Page({ params }: { params: { id: string } }) {

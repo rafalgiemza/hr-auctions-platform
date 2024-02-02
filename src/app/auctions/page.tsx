@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { CreateAuction } from "~/components/main/auction/create-auction";
+import { CreateAuction } from "~/components/forms/auction/create-auction";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
