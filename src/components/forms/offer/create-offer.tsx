@@ -6,11 +6,11 @@ import { useState } from "react";
 import { api } from "~/trpc/react";
 
 interface CreateOfferProps {
-  auctionId: string
+  auctionId: string;
 }
 
 export function CreateOffer(props: CreateOfferProps) {
-  const { auctionId } = props
+  const { auctionId } = props;
   const router = useRouter();
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
@@ -19,7 +19,7 @@ export function CreateOffer(props: CreateOfferProps) {
     onSuccess: () => {
       router.refresh();
       setTitle("");
-      setDescription("")
+      setDescription("");
     },
   });
 

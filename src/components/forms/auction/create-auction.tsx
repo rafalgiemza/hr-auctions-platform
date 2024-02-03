@@ -14,7 +14,7 @@ export function CreateAuction() {
     onSuccess: () => {
       router.refresh();
       setTitle("");
-      setDescription("")
+      setDescription("");
     },
   });
 

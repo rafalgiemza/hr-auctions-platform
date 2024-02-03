@@ -23,17 +23,22 @@ export const auctionRouter = createTRPCRouter({
 
   auctionById: publicProcedure
     .input(z.string())
-    .query(async ({ctx, input}) => { 
+    .query(async ({ ctx, input }) => {
       const id = parseInt(input);
-      const auction = await ctx.db.select().from(auctions).where(eq(auctions.id, id));
-      return auction.at(0)
+      const auction = await ctx.db
+        .select()
+        .from(auctions)
+        .where(eq(auctions.id, id));
+      return auction.at(0);
     }),
 
   create: protectedProcedure
-    .input(z.object({ 
-      title: z.string().min(1),
-      description: z.string().min(1) 
-    }))
+    .input(
+      z.object({
+        title: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(auctions).values({
         title: input.title,

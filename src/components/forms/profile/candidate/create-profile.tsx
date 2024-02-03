@@ -4,7 +4,9 @@ import { useRouter } from "next/navigation";
 
 import { api } from "~/trpc/react";
 
-export function CreateCandidateProfile({description = 'candidate description'}) {
+export function CreateCandidateProfile({
+  description = "candidate description",
+}) {
   const router = useRouter();
 
   const createCandidateProfile = api.candidateProfile.create.useMutation({
@@ -26,7 +28,9 @@ export function CreateCandidateProfile({description = 'candidate description'}) 
         className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
         disabled={createCandidateProfile.isLoading}
       >
-        {createCandidateProfile.isLoading ? "creating..." : `Create candidate profile (${description})`}
+        {createCandidateProfile.isLoading
+          ? "creating..."
+          : `Create candidate profile (${description})`}
       </button>
     </form>
   );

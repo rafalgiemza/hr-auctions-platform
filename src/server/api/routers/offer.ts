@@ -23,26 +23,29 @@ export const offerRouter = createTRPCRouter({
 
   getAllOffersForAuction: publicProcedure
     .input(z.string())
-    .query(async ({ctx, input}) => { 
+    .query(async ({ ctx, input }) => {
       const auctionId = input;
-      const res = await ctx.db.select().from(offers).where(eq(offers.auctionId, auctionId));
-      return res
+      const res = await ctx.db
+        .select()
+        .from(offers)
+        .where(eq(offers.auctionId, auctionId));
+      return res;
     }),
 
-  offerById: publicProcedure
-    .input(z.string())
-    .query(async ({ctx, input}) => { 
-      const id = parseInt(input);
-      const offer = await ctx.db.select().from(offers).where(eq(offers.id, id));
-      return offer.at(0)
-    }),
+  offerById: publicProcedure.input(z.string()).query(async ({ ctx, input }) => {
+    const id = parseInt(input);
+    const offer = await ctx.db.select().from(offers).where(eq(offers.id, id));
+    return offer.at(0);
+  }),
 
   create: protectedProcedure
-    .input(z.object({ 
-      auctionId: z.string(),
-      title: z.string().min(1),
-      description: z.string().min(1) 
-    }))
+    .input(
+      z.object({
+        auctionId: z.string(),
+        title: z.string().min(1),
+        description: z.string().min(1),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(offers).values({
         authorId: ctx.session.user.id,

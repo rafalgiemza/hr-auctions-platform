@@ -18,7 +18,9 @@ import { type AdapterAccount } from "next-auth/adapters";
  *
  * @see https://orm.drizzle.team/docs/goodies#multi-project-schema
  */
-export const mysqlTable = mysqlTableCreator((name) => `hr-auctions-platform_${name}`);
+export const mysqlTable = mysqlTableCreator(
+  (name) => `hr-auctions-platform_${name}`,
+);
 
 export const posts = mysqlTable(
   "post",
@@ -34,12 +36,10 @@ export const posts = mysqlTable(
   (example) => ({
     authorIdIdx: index("authorId_idx").on(example.authorId),
     nameIndex: index("name_idx").on(example.name),
-  })
+  }),
 );
 
-export const users = mysqlTable(
-  "user", 
-{
+export const users = mysqlTable("user", {
   id: varchar("id", { length: 255 }).notNull().primaryKey(),
   name: varchar("name", { length: 255 }),
   email: varchar("email", { length: 255 }).notNull(),
@@ -78,7 +78,7 @@ export const accounts = mysqlTable(
   (account) => ({
     compoundKey: primaryKey(account.provider, account.providerAccountId),
     userIdIdx: index("userId_idx").on(account.userId),
-  })
+  }),
 );
 
 export const accountsRelations = relations(accounts, ({ one }) => ({
@@ -96,7 +96,7 @@ export const sessions = mysqlTable(
   },
   (session) => ({
     userIdIdx: index("userId_idx").on(session.userId),
-  })
+  }),
 );
 
 export const sessionsRelations = relations(sessions, ({ one }) => ({
@@ -108,34 +108,46 @@ export const candidateProfiles = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     userId: varchar("userId", { length: 255 }).notNull(),
-    description: text('description'),
+    description: text("description"),
   },
   (candidateProfile) => ({
     userIdIdx: index("userId_idx").on(candidateProfile.userId),
-  })
-)
+  }),
+);
 
-export const candidateProfilesRelations = relations(candidateProfiles, ({ one }) => ({
-  user: one(users, { fields: [candidateProfiles.userId], references: [users.id] }),
-}))
+export const candidateProfilesRelations = relations(
+  candidateProfiles,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [candidateProfiles.userId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const recruiterProfiles = mysqlTable(
   "recruiterProfile",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     userId: varchar("userId", { length: 255 }).notNull(),
-    description: text('description'),
+    description: text("description"),
     company: varchar("profile_type", { length: 256 }),
-    verified: boolean('verified'),
+    verified: boolean("verified"),
   },
   (recruiterProfile) => ({
     userIdIdx: index("userId_idx").on(recruiterProfile.userId),
-  })
-)
+  }),
+);
 
-export const recruiterProfilesRelations = relations(recruiterProfiles, ({ one }) => ({
-  user: one(users, { fields: [recruiterProfiles.userId], references: [users.id] }),
-}))
+export const recruiterProfilesRelations = relations(
+  recruiterProfiles,
+  ({ one }) => ({
+    user: one(users, {
+      fields: [recruiterProfiles.userId],
+      references: [users.id],
+    }),
+  }),
+);
 
 export const verificationTokens = mysqlTable(
   "verificationToken",
@@ -146,7 +158,7 @@ export const verificationTokens = mysqlTable(
   },
   (vt) => ({
     compoundKey: primaryKey(vt.identifier, vt.token),
-  })
+  }),
 );
 
 export const auctions = mysqlTable(
@@ -154,8 +166,8 @@ export const auctions = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     title: varchar("title", { length: 256 }),
-    description: text('description'),
-    price: int('price'),
+    description: text("description"),
+    price: int("price"),
     priceUnit: varchar("name", { length: 256 }),
     authorId: varchar("authorId", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
@@ -166,21 +178,21 @@ export const auctions = mysqlTable(
   (auction) => ({
     authorIdIdx: index("authorId_idx").on(auction.authorId),
     titleIndex: index("name_idx").on(auction.title),
-  })
+  }),
 );
 
 export const auctionsRelations = relations(auctions, ({ one }) => ({
   user: one(users, { fields: [auctions.authorId], references: [users.id] }),
-}))
+}));
 
 export const offers = mysqlTable(
-  "offer", 
+  "offer",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     auctionId: varchar("auctionId", { length: 255 }).notNull(),
     title: varchar("title", { length: 256 }),
-    description: text('description'),
-    price: int('price'),
+    description: text("description"),
+    price: int("price"),
     priceUnit: varchar("name", { length: 256 }),
     authorId: varchar("authorId", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
@@ -192,11 +204,13 @@ export const offers = mysqlTable(
     auctionIdIdx: index("auctionId_idx").on(offer.auctionId),
     authorIdIdx: index("authorId_idx").on(offer.authorId),
     createdAtIdx: index("createdAt_idx").on(offer.createdAt),
-  })
-)
+  }),
+);
 
 export const offersRelations = relations(offers, ({ one }) => ({
-  auction: one(auctions, { fields: [offers.auctionId],  references: [auctions.id]}),
-  author: one(users, { fields: [offers.authorId], references: [users.id]})
-}))
-
+  auction: one(auctions, {
+    fields: [offers.auctionId],
+    references: [auctions.id],
+  }),
+  author: one(users, { fields: [offers.authorId], references: [users.id] }),
+}));

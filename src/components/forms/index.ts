@@ -1,1 +1,1 @@
-export * from './post/create-post'
+export * from "./post/create-post";

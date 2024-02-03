@@ -15,7 +15,7 @@ export const appRouter = createTRPCRouter({
   candidateProfile: candidateProfileRouter,
   recruiterProfile: recruiterProfileRouter,
   auction: auctionRouter,
-  offer: offerRouter
+  offer: offerRouter,
 });
 
 // export type definition of API
