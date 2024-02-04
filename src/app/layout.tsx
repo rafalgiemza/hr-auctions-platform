@@ -5,8 +5,8 @@ import { cookies } from "next/headers";
 
 import { ThemeProvider } from "~/components/providers/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
-import { getServerAuthSession } from "~/server/auth";
-import Link from "next/link";
+
+import { TopNavMenu } from "~/components/main-layout/top-nav-menu";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -24,9 +24,6 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const session = await getServerAuthSession();
-  console.log("🚀 ~ Home ~ session:", session);
-
   return (
     <html lang="en">
       <body className={`font-sans ${inter.variable}`}>
@@ -37,14 +34,10 @@ export default async function RootLayout({
           disableTransitionOnChange
         >
           <TRPCReactProvider cookies={cookies().toString()}>
-            <Link href={"/"}>HOME</Link>
-            {` | `}
-            <Link href={"/dashboard"}>dashboard</Link>
-            {` | `}
-            <Link href={"/profile"}>PROFILE</Link>
-            {` | `}
-            <Link href={"/T3"}>T3</Link>
-            {children}
+            <div className="flex flex-col">
+              <TopNavMenu />
+              <main>{children}</main>
+            </div>
           </TRPCReactProvider>
         </ThemeProvider>
       </body>
