@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { AlertNoProfile } from "~/components/alert/no-profile";
 import {
   Table,
   TableBody,
@@ -10,6 +11,7 @@ import {
 } from "~/components/ui/table";
 
 import { getServerAuthSession } from "~/server/auth";
+import { api } from "~/trpc/server";
 
 export default async function Home() {
   const session = await getServerAuthSession();
@@ -46,34 +48,45 @@ export default async function Home() {
     },
   ];
 
+  const recruiterProfile = await api.recruiterProfile.getAll.query();
+
+  const candidateProfile = await api.candidateProfile.getAll.query();
+
+  const showAlert =
+    session !== null &&
+    (recruiterProfile.length === 0 || candidateProfile.length === 0);
+
   return (
-    <Table>
-      <TableCaption>Side map</TableCaption>
-      <TableHeader>
-        <TableRow>
-          <TableHead className="w-[100px]">Link</TableHead>
-        </TableRow>
-      </TableHeader>
-      <TableBody>
-        {links.map((item) => {
-          return (
-            <TableRow key={item.url}>
-              <TableCell className="font-medium">
-                {item.disabled ? (
-                  <p>You need to login to go to: {item.label}</p>
-                ) : (
-                  <Link
-                    href={item.url}
-                    className="rounded-full bg-white/10 px-3 py-3 font-semibold no-underline transition hover:bg-white/20 md:px-10"
-                  >
-                    {item.label}
-                  </Link>
-                )}
-              </TableCell>
-            </TableRow>
-          );
-        })}
-      </TableBody>
-    </Table>
+    <>
+      <AlertNoProfile showAlert={showAlert} />
+      <Table>
+        <TableCaption>Side map</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[100px]">Link</TableHead>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {links.map((item) => {
+            return (
+              <TableRow key={item.url}>
+                <TableCell className="font-medium">
+                  {item.disabled ? (
+                    <p>You need to login to go to: {item.label}</p>
+                  ) : (
+                    <Link
+                      href={item.url}
+                      className="rounded-full bg-white/10 px-3 py-3 font-semibold no-underline transition hover:bg-white/20 md:px-10"
+                    >
+                      {item.label}
+                    </Link>
+                  )}
+                </TableCell>
+              </TableRow>
+            );
+          })}
+        </TableBody>
+      </Table>
+    </>
   );
 }

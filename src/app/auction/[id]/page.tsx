@@ -1,25 +1,28 @@
+import { OfferList } from "~/components/auction/offer-list";
 import { CreateOffer } from "~/components/forms/offer/create-offer";
+import { BreadCrumbs } from "~/components/main-layout/bread-crumbs";
+import { ResponsiveDialog } from "~/components/shared/responsive-dialog";
 import { api } from "~/trpc/server";
 
-export default async function Page({ params }: { params: { id: string } }) {
+interface AuctionPagePros {
+  params: { id: string };
+}
+
+export default async function AuctionPage({ params }: AuctionPagePros) {
   const auction = await api.auction.auctionById.query(params.id);
   const offers = await api.offer.getAllOffersForAuction.query(params.id);
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-start bg-gradient-to-b from-[#2e026d] to-[#15162c] text-white">
-      <h1>{auction?.title}</h1>
-      <p>{auction?.description}</p>
+    <div className="flex-1 space-y-4 p-8 pt-6">
+      <BreadCrumbs items={["Auction"]} />
+      <p>TITLE: {auction?.title}</p>
+      <p>DESCRIPTION: {auction?.description}</p>
 
-      <CreateOffer auctionId={params.id} />
+      <ResponsiveDialog title="Create offer">
+        <CreateOffer auctionId={params.id} />
+      </ResponsiveDialog>
 
-      {offers?.map((offer) => (
-        <div key={offer.id}>
-          <p>id: {offer.id}</p>
-          <p>author id: {offer.authorId}</p>
-          <p>title: {offer.title}</p>
-          <p>description: {offer.description}</p>
-        </div>
-      ))}
-    </main>
+      <OfferList offers={offers} />
+    </div>
   );
 }
