@@ -1,3 +1,4 @@
+import { redirect } from "next/navigation";
 import Link from "next/link";
 import { AlertNoProfile } from "~/components/alert/no-profile";
 import {
@@ -14,6 +15,8 @@ import { getServerAuthSession } from "~/server/auth";
 import { api } from "~/trpc/server";
 
 export default async function Home() {
+  redirect("/auctions");
+
   const session = await getServerAuthSession();
   const links = [
     {
@@ -48,13 +51,7 @@ export default async function Home() {
     },
   ];
 
-  const recruiterProfile = await api.recruiterProfile.getAll.query();
-
-  const candidateProfile = await api.candidateProfile.getAll.query();
-
-  const showAlert =
-    session !== null &&
-    (recruiterProfile.length === 0 || candidateProfile.length === 0);
+  const showAlert = false;
 
   return (
     <>

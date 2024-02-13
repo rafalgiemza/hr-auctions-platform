@@ -7,6 +7,7 @@ import { ThemeProvider } from "~/components/providers/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import { TopNavMenu } from "~/components/main-layout/top-nav-menu";
+import { Toaster } from "~/components/ui/toaster";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -37,6 +38,7 @@ export default async function RootLayout({
             <div className="flex flex-col">
               <TopNavMenu />
               <main>{children}</main>
+              <Toaster />
             </div>
           </TRPCReactProvider>
         </ThemeProvider>

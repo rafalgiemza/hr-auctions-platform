@@ -1,5 +1,7 @@
-import { ScrollArea } from "~/components/ui/scroll-area";
 import Link from "next/link";
+import { api } from "~/trpc/server";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Badge } from "../ui/badge";
 
 interface Auction {
   id: number;
@@ -12,33 +14,33 @@ interface Auction {
   priceUnit: string | null;
 }
 
-interface AuctionListProps {
-  auctions: Auction[];
-}
+export async function AuctionList() {
+  const auctions = await api.auction.getAll.query();
+  console.log("🚀 ~ AuctionList ~ auctions:", auctions);
 
-export function AuctionList({ auctions }: AuctionListProps) {
   return (
-    <ScrollArea className="h-screen">
-      <div className="flex flex-col gap-2">
-        {auctions.map((auction) => (
-          <Link
-            key={auction.id}
-            href={`auction/${auction?.id}`}
-            className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all hover:bg-accent"
-          >
-            <div className="flex w-full flex-col gap-1">
-              <div className="flex items-center">
-                <div className="flex items-center gap-2">
-                  <div className="font-semibold">{auction.title}</div>
-                </div>
-              </div>
-            </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground">
-              {auction?.description?.substring(0, 300)}
-            </div>
-          </Link>
-        ))}
-      </div>
-    </ScrollArea>
+    <div className="grid gap-4 md:grid-cols-2 ">
+      {auctions.map((auction) => (
+        <Link
+          key={auction.id}
+          href={`auction/${auction?.id}`}
+          className="transition-all hover:scale-105"
+        >
+          <Card>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              <CardTitle className="text-sm font-medium">
+                {auction.title}
+              </CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-xs text-muted-foreground">
+                {auction?.description?.substring(0, 300)}
+              </p>
+              <Badge variant="secondary">{auction.salary}</Badge>
+            </CardContent>
+          </Card>
+        </Link>
+      ))}
+    </div>
   );
 }

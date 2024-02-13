@@ -15,13 +15,9 @@ export default async function AuctionPage({ params }: AuctionPagePros) {
   return (
     <div className="flex-1 space-y-4 p-8 pt-6">
       <BreadCrumbs items={["Auction"]} />
-      <p>TITLE: {auction?.title}</p>
-      <p>DESCRIPTION: {auction?.description}</p>
-
-      <ResponsiveDialog title="Create offer">
-        <CreateOffer auctionId={params.id} />
-      </ResponsiveDialog>
-
+      <p>{auction?.title}</p>
+      <p> {auction?.description}</p>
+      <p> {auction?.salary}</p>
       <OfferList offers={offers} />
     </div>
   );
