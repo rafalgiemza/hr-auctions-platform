@@ -16,7 +16,6 @@ import {
 
 import { AccountSwitcher } from "./account-switcher";
 import { MailDisplay } from "./auction-display";
-import { MailList } from "./auction-list";
 import { Nav } from "./nav";
 import { type Mail } from "~/app/mail/data";
 import { useMail } from "~/app/mail/use-mail";
@@ -204,12 +203,6 @@ export function Auction({
                 </div>
               </form>
             </div>
-            <TabsContent value="all" className="m-0">
-              <MailList items={mails} />
-            </TabsContent>
-            <TabsContent value="unread" className="m-0">
-              <MailList items={mails.filter((item) => !item.read)} />
-            </TabsContent>
           </Tabs>
         </ResizablePanel>
         <ResizableHandle withHandle />
