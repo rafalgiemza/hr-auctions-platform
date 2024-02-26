@@ -103,6 +103,18 @@ export const sessionsRelations = relations(sessions, ({ one }) => ({
   user: one(users, { fields: [sessions.userId], references: [users.id] }),
 }));
 
+export const verificationTokens = mysqlTable(
+  "verificationToken",
+  {
+    identifier: varchar("identifier", { length: 255 }).notNull(),
+    token: varchar("token", { length: 255 }).notNull(),
+    expires: timestamp("expires", { mode: "date" }).notNull(),
+  },
+  (vt) => ({
+    compoundKey: primaryKey(vt.identifier, vt.token),
+  }),
+);
+
 export const candidateProfiles = mysqlTable(
   "candidateProfile",
   {
@@ -149,26 +161,14 @@ export const recruiterProfilesRelations = relations(
   }),
 );
 
-export const verificationTokens = mysqlTable(
-  "verificationToken",
-  {
-    identifier: varchar("identifier", { length: 255 }).notNull(),
-    token: varchar("token", { length: 255 }).notNull(),
-    expires: timestamp("expires", { mode: "date" }).notNull(),
-  },
-  (vt) => ({
-    compoundKey: primaryKey(vt.identifier, vt.token),
-  }),
-);
-
 export const auctions = mysqlTable(
   "auction",
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     title: varchar("title", { length: 256 }),
     description: text("description"),
-    price: int("price"),
-    priceUnit: varchar("name", { length: 256 }),
+    salary: varchar("salary", { length: 256 }),
+    priceUnit: varchar("priceUnit", { length: 256 }),
     authorId: varchar("authorId", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
       .default(sql`CURRENT_TIMESTAMP`)

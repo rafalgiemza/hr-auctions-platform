@@ -37,12 +37,14 @@ export const auctionRouter = createTRPCRouter({
       z.object({
         title: z.string().min(1),
         description: z.string().min(1),
+        salary: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(auctions).values({
         title: input.title,
         description: input.description,
+        salary: input.salary,
         authorId: ctx.session.user.id,
       });
     }),

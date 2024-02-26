@@ -7,6 +7,7 @@ import { ThemeProvider } from "~/components/providers/theme-provider";
 import { TRPCReactProvider } from "~/trpc/react";
 
 import { TopNavMenu } from "~/components/main-layout/top-nav-menu";
+import { Toaster } from "~/components/ui/toaster";
 
 import { type Metadata } from "next";
 import { type PropsWithChildren } from "react";
@@ -37,6 +38,7 @@ export default async function RootLayout({ children }: PropsWithChildren) {
             <div className="flex flex-col">
               <TopNavMenu />
               <Wrapper>
+                <Toaster />
                 <main>{children}</main>
               </Wrapper>
             </div>

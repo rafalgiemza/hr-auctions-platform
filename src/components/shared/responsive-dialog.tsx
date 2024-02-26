@@ -1,6 +1,6 @@
 "use client";
 
-import * as React from "react";
+import React from "react";
 
 import { useMediaQuery } from "~/hooks/use-media.query";
 import { Button } from "~/components/ui/button";
@@ -22,8 +22,11 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "~/components/ui/drawer";
+import { Card } from "../ui/card";
 
 interface ResponsiveDialogProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   title?: string;
   description?: string;
   children?: React.ReactNode;
@@ -31,11 +34,12 @@ interface ResponsiveDialogProps {
 
 export function ResponsiveDialog(props: ResponsiveDialogProps) {
   const {
+    open = false,
+    setOpen,
     title = "dialog title",
-    description = "dialog description",
+    description = "",
     children,
   } = props;
-  const [open, setOpen] = React.useState(false);
   const isDesktop: boolean = useMediaQuery("(min-width: 768px)");
 
   if (isDesktop) {
@@ -44,13 +48,15 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
         <DialogTrigger asChild>
           <Button variant="outline">{title}</Button>
         </DialogTrigger>
-        <DialogContent className="sm:max-w-[425px]">
-          <DialogHeader>
-            <DialogTitle>{title}</DialogTitle>
-            <DialogDescription>{description}</DialogDescription>
-          </DialogHeader>
-          {children}
-        </DialogContent>
+        <Card>
+          <DialogContent className="sm:max-w-[425px]">
+            <DialogHeader>
+              <DialogTitle>{title}</DialogTitle>
+              <DialogDescription>{description}</DialogDescription>
+            </DialogHeader>
+            {children}
+          </DialogContent>
+        </Card>
       </Dialog>
     );
   }
@@ -58,7 +64,11 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button variant="outline">{title}</Button>
+        <div className="absolute bottom-10 right-10">
+          <Button variant="rounded" size="icon">
+            +
+          </Button>
+        </div>
       </DrawerTrigger>
       <DrawerContent>
         <DrawerHeader className="text-left">
