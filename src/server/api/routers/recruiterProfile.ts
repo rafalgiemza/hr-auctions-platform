@@ -8,6 +8,16 @@ import {
 import { recruiterProfiles } from "~/server/db/schema";
 
 export const recruiterProfileRouter = createTRPCRouter({
+  getMyProfiles: publicProcedure.query(({ ctx }) => {
+    const userId = ctx.session?.user.id ?? "";
+    return ctx.db.query.users.findMany({
+      where: (users, { eq }) => eq(users.id, userId),
+      with: {
+        recruiterProfiles: true,
+      },
+    });
+  }),
+
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.recruiterProfiles.findMany({});
   }),
