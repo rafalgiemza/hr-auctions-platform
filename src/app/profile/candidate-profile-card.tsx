@@ -9,12 +9,12 @@ import {
 } from "~/components/ui/card";
 
 interface CandidateProfileCardProps {
+  headline: string | null;
+  description: string | null;
+  keyWords: string | null;
+  minSalary: string | null;
+  minSalaryUnit: string | null;
   id: number;
-  headline: string;
-  description: string;
-  keyWords: string;
-  minSalary: string;
-  minSalaryUnit: string;
   userId: string;
 }
 
@@ -38,7 +38,7 @@ export function CandidateProfileCard(props: {
       <CardContent>
         <div className="flex space-x-4 text-sm ">
           <div className="flex items-center gap-4 py-4">
-            {keyWords.split(",").map((item) => (
+            {keyWords?.split(",").map((item) => (
               <div className="flex items-center" key={item}>
                 <CheckCircle className="mr-1 h-3 w-3 " />
                 {item}

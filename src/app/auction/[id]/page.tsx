@@ -19,7 +19,7 @@ export default async function AuctionPage({ params }: AuctionPagePros) {
       <p>{auction?.title}</p>
       <p> {auction?.description}</p>
       <p> {auction?.salary}</p>
-      <CreateBidBtn auctionId={auction.id} />
+      {auction?.id && <CreateBidBtn auctionId={auction.id} />}
       <OfferList offers={offers} />
     </div>
   );

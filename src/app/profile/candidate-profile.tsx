@@ -5,17 +5,17 @@ import { CreateSpecialistProfileBtn } from "./create-specialist-profile-btn";
 
 interface CandidateProfileProps {
   id: string;
+  image: string | null;
   name: string | null;
   email: string;
   emailVerified: Date | null;
-  image: string | null;
   candidateProfiles: {
+    headline: string | null;
+    description: string | null;
+    keyWords: string | null;
+    minSalary: string | null;
+    minSalaryUnit: string | null;
     id: number;
-    headline: string;
-    description: string;
-    keyWords: string;
-    minSalary: string;
-    minSalaryUnit: string;
     userId: string;
   }[];
 }

@@ -9,7 +9,7 @@ import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
 import { Input } from "~/components/ui/input";
 import { Error } from "~/components/shared/forms/error";
-import Router from "next/router";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   headline: z.string(),
@@ -26,6 +26,7 @@ interface CreateRecruiterProfileProps {
 export function CreateRecruiterProfile(props: CreateRecruiterProfileProps) {
   const { setOpen } = props;
   const { toast } = useToast();
+  const router = useRouter();
 
   const {
     register,
@@ -42,13 +43,13 @@ export function CreateRecruiterProfile(props: CreateRecruiterProfileProps) {
         title: "Profile created!",
         description: "",
       });
+      router.refresh();
     },
   });
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      await createRecruiterProfile.mutate(data);
-      Router.reload();
+      createRecruiterProfile.mutate(data);
     } catch (error) {
       toast({
         title: "Something goes wrong :(",
