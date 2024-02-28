@@ -146,6 +146,7 @@ export const recruiterProfiles = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     userId: varchar("userId", { length: 255 }).notNull(),
+    headline: varchar("headline", { length: 255 }),
     description: text("description"),
     company: varchar("profile_type", { length: 256 }),
     verified: boolean("verified"),

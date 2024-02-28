@@ -42,8 +42,8 @@ export const offerRouter = createTRPCRouter({
     .input(
       z.object({
         auctionId: z.string(),
-        title: z.string().min(1),
-        description: z.string().min(1),
+        title: z.string(),
+        description: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {

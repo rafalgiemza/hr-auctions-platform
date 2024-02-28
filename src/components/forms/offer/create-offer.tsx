@@ -1,56 +1,88 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { useState } from "react";
-
+import { zodResolver } from "@hookform/resolvers/zod";
+import { SubmitHandler, useForm } from "react-hook-form";
+import { z } from "zod";
+import { Button } from "~/components/ui/button";
+import { Textarea } from "~/components/ui/textarea";
 import { api } from "~/trpc/react";
+import { useToast } from "~/components/ui/use-toast";
+import { Input } from "~/components/ui/input";
+import { useRouter } from "next/navigation";
+
+const schema = z.object({
+  title: z.string().min(4),
+  description: z.string().min(8),
+  price: z.string(),
+});
+
+type FormFields = z.infer<typeof schema>;
 
 interface CreateOfferProps {
-  auctionId: string;
+  auctionId: number;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CreateOffer(props: CreateOfferProps) {
-  const { auctionId } = props;
+  const { auctionId, setOpen } = props;
+  const { toast } = useToast();
   const router = useRouter();
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
 
-  const createOffer = api.offer.create.useMutation({
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<FormFields>({
+    resolver: zodResolver(schema),
+  });
+
+  const createAuction = api.offer.create.useMutation({
     onSuccess: () => {
+      setOpen(false);
+      toast({
+        title: "Offer created!",
+        description: "",
+      });
       router.refresh();
-      setTitle("");
-      setDescription("");
     },
   });
 
+  const onSubmit: SubmitHandler<FormFields> = async (data) => {
+    try {
+      createAuction.mutate({
+        auctionId: auctionId.toString(),
+        title: data.title,
+        description: data.description,
+      });
+    } catch (error) {
+      toast({
+        title: "Something goes wrong :(",
+        description: "",
+      });
+    }
+  };
+
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        createOffer.mutate({ auctionId, title, description });
-      }}
-      className="flex flex-col gap-2 p-12"
-    >
-      <input
-        type="text"
-        placeholder="Title"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
-      />
-      <textarea
+    <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
+      <Input {...register("title")} placeholder="Title" />
+      {errors.title && (
+        <div className="text-red-500">{errors.title.message}</div>
+      )}
+      <Textarea
+        {...register("description")}
         placeholder="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
-        className="w-full rounded-full px-4 py-2 text-black"
+        rows={5}
       />
-      <button
-        type="submit"
-        className="rounded-full bg-white/10 px-10 py-3 font-semibold transition hover:bg-white/20"
-        disabled={createOffer.isLoading}
-      >
-        {createOffer.isLoading ? "Creating offer..." : "Create offer"}
-      </button>
+      {errors.description && (
+        <div className="text-red-500">{errors.description.message}</div>
+      )}
+      <Input {...register("price")} placeholder="Price" />
+      {errors.price && (
+        <div className="text-red-500">{errors.price.message}</div>
+      )}
+      <Button type="submit" disabled={isSubmitting}>
+        {isSubmitting ? "Creating..." : `Create bid`}
+      </Button>
     </form>
   );
 }

@@ -8,6 +8,7 @@ import { Textarea } from "~/components/ui/textarea";
 import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
 import { Input } from "~/components/ui/input";
+import { useRouter } from "next/navigation";
 
 const schema = z.object({
   headline: z.string(),
@@ -25,6 +26,7 @@ interface CreateCandidateProfileProps {
 
 export function CreateCandidateProfile(props: CreateCandidateProfileProps) {
   const { setOpen } = props;
+  const router = useRouter();
   const { toast } = useToast();
   const {
     register,
@@ -37,6 +39,7 @@ export function CreateCandidateProfile(props: CreateCandidateProfileProps) {
   const createCandidateProfile = api.candidateProfile.create.useMutation({
     onSuccess: () => {
       setOpen(false);
+      router.refresh();
       toast({
         title: "Profile created!",
         description: "",

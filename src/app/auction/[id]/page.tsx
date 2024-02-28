@@ -3,6 +3,7 @@ import { CreateOffer } from "~/components/forms/offer/create-offer";
 import { BreadCrumbs } from "~/components/main-layout/bread-crumbs";
 import { ResponsiveDialog } from "~/components/shared/responsive-dialog";
 import { api } from "~/trpc/server";
+import { CreateBidBtn } from "./createBidBtn";
 
 interface AuctionPagePros {
   params: { id: string };
@@ -18,6 +19,7 @@ export default async function AuctionPage({ params }: AuctionPagePros) {
       <p>{auction?.title}</p>
       <p> {auction?.description}</p>
       <p> {auction?.salary}</p>
+      <CreateBidBtn auctionId={auction.id} />
       <OfferList offers={offers} />
     </div>
   );

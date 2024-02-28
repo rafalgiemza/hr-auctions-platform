@@ -1,4 +1,11 @@
-import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
+import { Building2 } from "lucide-react";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 
 interface HeadhunterProfileCardProps {
   id: number;
@@ -21,13 +28,14 @@ export function HeadhunterProfileCard(props: {
     <Card>
       <CardHeader>
         <CardTitle>Headhunter profile</CardTitle>
+        <CardDescription>{description}</CardDescription>
       </CardHeader>
       <CardContent className="grid gap-6">
-        <div className="flex items-center justify-between space-x-4">
-          <div className="flex items-center space-x-4">
-            <div>
-              <p className="text-sm font-medium leading-none">{description}</p>
-              <p className="text-sm font-medium leading-none">{company}</p>
+        <div className="flex space-x-4 text-sm ">
+          <div className="flex items-center gap-4 py-4">
+            <div className="flex items-center">
+              <Building2 className="mr-1 h-3 w-3 " />
+              {company}
             </div>
           </div>
         </div>

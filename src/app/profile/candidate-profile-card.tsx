@@ -1,5 +1,4 @@
-import { CircleIcon, StarIcon } from "@radix-ui/react-icons";
-import { BadgeDollarSignIcon, CheckCircle, DollarSignIcon } from "lucide-react";
+import { CheckCircle } from "lucide-react";
 
 import {
   Card,
@@ -40,7 +39,7 @@ export function CandidateProfileCard(props: {
         <div className="flex space-x-4 text-sm ">
           <div className="flex items-center gap-4 py-4">
             {keyWords.split(",").map((item) => (
-              <div className="flex items-center ">
+              <div className="flex items-center" key={item}>
                 <CheckCircle className="mr-1 h-3 w-3 " />
                 {item}
               </div>

@@ -26,7 +26,6 @@ export const CandidateProfile = (props: { data: CandidateProfileProps[] }) => {
   if (!user) return null;
 
   const { name, email, image, candidateProfiles } = user;
-  console.log("🚀 ~ CandidateProfile ~ candidateProfiles:", candidateProfiles);
 
   if (candidateProfiles.length === 0) {
     return <CreateSpecialistProfileBtn />;

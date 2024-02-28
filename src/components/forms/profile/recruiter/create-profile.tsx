@@ -7,9 +7,14 @@ import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
+import { Input } from "~/components/ui/input";
+import { Error } from "~/components/shared/forms/error";
+import Router from "next/router";
 
 const schema = z.object({
+  headline: z.string(),
   description: z.string().min(8),
+  company: z.string(),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -20,7 +25,6 @@ interface CreateRecruiterProfileProps {
 
 export function CreateRecruiterProfile(props: CreateRecruiterProfileProps) {
   const { setOpen } = props;
-
   const { toast } = useToast();
 
   const {
@@ -43,7 +47,8 @@ export function CreateRecruiterProfile(props: CreateRecruiterProfileProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      createRecruiterProfile.mutate(data);
+      await createRecruiterProfile.mutate(data);
+      Router.reload();
     } catch (error) {
       toast({
         title: "Something goes wrong :(",
@@ -54,10 +59,11 @@ export function CreateRecruiterProfile(props: CreateRecruiterProfileProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <Textarea {...register("description")} />
-      {errors.description && (
-        <div className="text-red-500">{errors.description.message}</div>
-      )}
+      <Input {...register("headline")} placeholder="headline" />
+      <Textarea {...register("description")} placeholder="description" />
+      <Error field={errors.description} />
+      <Input {...register("company")} placeholder="company name" />
+      <Error field={errors.company} />
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Creating..." : `Create recruiter profile`}
       </Button>
