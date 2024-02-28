@@ -23,6 +23,7 @@ import {
   DrawerTrigger,
 } from "~/components/ui/drawer";
 import { Card } from "../ui/card";
+import { PlusCircledIcon } from "@radix-ui/react-icons";
 
 interface ResponsiveDialogProps {
   open: boolean;
@@ -46,7 +47,10 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogTrigger asChild>
-          <Button variant="outline">{title}</Button>
+          <Button>
+            <PlusCircledIcon className="mr-2 h-4 w-4" />
+            {title}
+          </Button>
         </DialogTrigger>
         <Card>
           <DialogContent className="sm:max-w-[425px]">
@@ -66,7 +70,7 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
       <DrawerTrigger asChild>
         <div className="absolute bottom-10 right-10">
           <Button variant="rounded" size="icon">
-            +
+            <PlusCircledIcon className="mr-2 h-4 w-4" />
           </Button>
         </div>
       </DrawerTrigger>

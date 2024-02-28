@@ -1,15 +1,20 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { SubmitHandler, useForm } from "react-hook-form";
+import { FieldError, SubmitHandler, useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "~/components/ui/button";
 import { Textarea } from "~/components/ui/textarea";
 import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
+import { Input } from "~/components/ui/input";
 
 const schema = z.object({
+  headline: z.string(),
   description: z.string().min(8),
+  keyWords: z.string(),
+  minSalary: z.string(),
+  minSalaryUnit: z.string(),
 });
 
 type FormFields = z.infer<typeof schema>;
@@ -20,9 +25,7 @@ interface CreateCandidateProfileProps {
 
 export function CreateCandidateProfile(props: CreateCandidateProfileProps) {
   const { setOpen } = props;
-
   const { toast } = useToast();
-
   const {
     register,
     handleSubmit,
@@ -54,13 +57,23 @@ export function CreateCandidateProfile(props: CreateCandidateProfileProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <Textarea {...register("description")} />
-      {errors.description && (
-        <div className="text-red-500">{errors.description.message}</div>
-      )}
+      <Input {...register("headline")} placeholder="headline" />
+      <Textarea {...register("description")} placeholder="description" />
+      <Error field={errors.description} />
+      <Input {...register("keyWords")} placeholder="keyWords" />
+      <Input {...register("minSalary")} placeholder="minSalary" />
+      <Input {...register("minSalaryUnit")} placeholder="minSalaryUnit" />
       <Button type="submit" disabled={isSubmitting}>
-        {isSubmitting ? "Creating..." : `Create specialist profile`}
+        {isSubmitting ? `Creating...` : `Create specialist profile`}
       </Button>
     </form>
   );
 }
+
+const Error = ({ field }: { field: FieldError | undefined }) => {
+  if (!field) {
+    return null;
+  }
+
+  return <div className="text-red-500">{field.message}</div>;
+};

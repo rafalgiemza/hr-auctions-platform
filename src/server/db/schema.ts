@@ -120,7 +120,11 @@ export const candidateProfiles = mysqlTable(
   {
     id: bigint("id", { mode: "number" }).primaryKey().autoincrement(),
     userId: varchar("userId", { length: 255 }).notNull(),
+    headline: varchar("headline", { length: 255 }),
     description: text("description"),
+    keyWords: varchar("key_words", { length: 255 }),
+    minSalary: varchar("min_salary", { length: 255 }),
+    minSalaryUnit: varchar("min_salary_unit", { length: 255 }),
   },
   (candidateProfile) => ({
     userIdIdx: index("userId_idx").on(candidateProfile.userId),

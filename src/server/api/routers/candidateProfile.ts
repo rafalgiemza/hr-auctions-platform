@@ -23,11 +23,23 @@ export const candidateProfileRouter = createTRPCRouter({
   }),
 
   create: protectedProcedure
-    .input(z.object({ description: z.string() }))
+    .input(
+      z.object({
+        headline: z.string(),
+        description: z.string().min(8),
+        keyWords: z.string(),
+        minSalary: z.string(),
+        minSalaryUnit: z.string(),
+      }),
+    )
     .mutation(async ({ ctx, input }) => {
       await ctx.db.insert(candidateProfiles).values({
-        description: input.description,
         userId: ctx.session.user.id,
+        headline: input.headline,
+        description: input.description,
+        keyWords: input.keyWords,
+        minSalary: input.minSalary,
+        minSalaryUnit: input.minSalaryUnit,
       });
     }),
 });
