@@ -1,4 +1,11 @@
 import { ScrollArea } from "~/components/ui/scroll-area";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "~/components/ui/card";
 
 interface Auction {
   id: number;
@@ -20,21 +27,16 @@ export function OfferList({ offers }: OfferListProps) {
     <ScrollArea className="h-screen">
       <div className="flex flex-col gap-2">
         {offers.map((offer) => (
-          <div
-            key={offer.id}
-            className="flex flex-col items-start gap-2 rounded-lg border p-3 text-left text-sm transition-all"
-          >
-            <div className="flex w-full flex-col gap-1">
-              <div className="flex items-center">
-                <div className="flex items-center gap-2">
-                  <div className="font-semibold">{offer.title}</div>
-                </div>
-              </div>
-            </div>
-            <div className="line-clamp-2 text-xs text-muted-foreground">
-              {offer?.description?.substring(0, 300)}
-            </div>
-          </div>
+          <Card key={offer.id}>
+            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+              {/* <CardTitle className="text-sm font-medium">Bid author</CardTitle> */}
+            </CardHeader>
+            <CardContent>
+              <div className="text-xl font-bold">{offer.title}</div>
+              <p className="text-md">{offer?.description?.substring(0, 300)}</p>
+              <p className="text-md">{offer?.price}</p>
+            </CardContent>
+          </Card>
         ))}
       </div>
     </ScrollArea>

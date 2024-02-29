@@ -16,14 +16,14 @@ export const metadata: Metadata = {
   description: "Example dashboard app built using the components.",
 };
 
-export default function DashboardPage() {
+export default async function DashboardPage() {
   return (
     <>
       <div className="flex-1 space-y-4 p-8 pt-6">
         <BreadCrumbs items={["Dashboard"]} />
         <Tabs defaultValue="overview" className="space-y-4">
           <TabsContent value="overview" className="space-y-4">
-            <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
+            {/* <div className="grid gap-4 md:grid-cols-1 lg:grid-cols-3">
               <Card>
                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                   <CardTitle className="text-sm font-medium">
@@ -100,14 +100,11 @@ export default function DashboardPage() {
                   </p>
                 </CardContent>
               </Card>
-            </div>
+            </div> */}
             <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
               <Card className="col-span-4 lg:col-span-7">
                 <CardHeader>
-                  <CardTitle>Recent Sales</CardTitle>
-                  <CardDescription>
-                    You made 265 sales this month.
-                  </CardDescription>
+                  <CardTitle>My auctions</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <RecentSales />

@@ -10,10 +10,6 @@ export const defaultContent = [
         label: "Auctions",
         link: "/auctions",
       },
-      {
-        label: "Profile",
-        link: "/profile",
-      },
     ],
   },
 ];

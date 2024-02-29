@@ -54,6 +54,7 @@ export function CreateOffer(props: CreateOfferProps) {
         auctionId: auctionId.toString(),
         title: data.title,
         description: data.description,
+        price: data.price,
       });
     } catch (error) {
       toast({

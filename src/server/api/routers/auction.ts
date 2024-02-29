@@ -15,6 +15,14 @@ export const auctionRouter = createTRPCRouter({
     });
   }),
 
+  getAllMyAuctions: publicProcedure.query(({ ctx }) => {
+    const userId = ctx.session?.user.id ?? "";
+    return ctx.db.query.auctions.findMany({
+      where: (auctions, { eq }) => eq(auctions.authorId, userId),
+      orderBy: (auctions, { desc }) => [desc(auctions.createdAt)],
+    });
+  }),
+
   getAll: publicProcedure.query(({ ctx }) => {
     return ctx.db.query.auctions.findMany({
       orderBy: (auctions, { desc }) => [desc(auctions.createdAt)],

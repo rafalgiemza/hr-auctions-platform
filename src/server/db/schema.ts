@@ -197,7 +197,7 @@ export const offers = mysqlTable(
     auctionId: varchar("auctionId", { length: 255 }).notNull(),
     title: varchar("title", { length: 256 }),
     description: text("description"),
-    price: int("price"),
+    price: varchar("price", { length: 256 }),
     priceUnit: varchar("name", { length: 256 }),
     authorId: varchar("authorId", { length: 255 }).notNull(),
     createdAt: timestamp("created_at")
