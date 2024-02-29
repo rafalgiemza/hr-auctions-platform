@@ -9,6 +9,7 @@ import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/navigation";
+import { Error } from "~/components/shared/forms/error";
 
 const schema = z.object({
   title: z.string().min(4),
@@ -40,7 +41,7 @@ export function CreateOffer(props: CreateOfferProps) {
     onSuccess: () => {
       setOpen(false);
       toast({
-        title: "Offer created!",
+        title: "Bid created!",
         description: "",
       });
       router.refresh();
@@ -64,22 +65,16 @@ export function CreateOffer(props: CreateOfferProps) {
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
-      <Input {...register("title")} placeholder="Title" />
-      {errors.title && (
-        <div className="text-red-500">{errors.title.message}</div>
-      )}
+      <Input {...register("title")} placeholder="Project or position name" />
+      <Error field={errors.title} />
       <Textarea
         {...register("description")}
-        placeholder="Description"
+        placeholder="Information about project or position"
         rows={5}
       />
-      {errors.description && (
-        <div className="text-red-500">{errors.description.message}</div>
-      )}
+      <Error field={errors.description} />
       <Input {...register("price")} placeholder="Price" />
-      {errors.price && (
-        <div className="text-red-500">{errors.price.message}</div>
-      )}
+      <Error field={errors.price} />
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Creating..." : `Create bid`}
       </Button>
