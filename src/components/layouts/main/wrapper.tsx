@@ -1,18 +1,7 @@
-import React from "react";
-// import Image from "next/image";
-
+import React, { type PropsWithChildren } from "react";
 import { Sidebar } from "~/components/layouts/main/sidebar";
-import { type PropsWithChildren } from "react";
-
-import { api } from "~/trpc/server";
 
 export const Wrapper = async ({ children }: PropsWithChildren) => {
-  const myCandidateProfile = await api.candidateProfile.getMyProfiles.query();
-  console.log("🚀 ~ Wrapper ~ myCandidateProfile:", myCandidateProfile);
-
-  const myRecruiterProfile = await api.candidateProfile.getMyProfiles.query();
-  console.log("🚀 ~ Wrapper ~ myRecruiterProfile:", myRecruiterProfile);
-
   return (
     <>
       <div className="md:hidden">

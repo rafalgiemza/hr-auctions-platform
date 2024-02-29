@@ -16,7 +16,6 @@ interface Auction {
 
 export async function AuctionList() {
   const auctions = await api.auction.getAll.query();
-  console.log("🚀 ~ AuctionList ~ auctions:", auctions);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 ">
