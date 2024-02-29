@@ -14,8 +14,9 @@ interface Auction {
   updatedAt: Date | null;
   description: string | null;
   title: string | null;
-  price: number | null;
   priceUnit: string | null;
+  auctionId: string;
+  price: string | null;
 }
 
 interface OfferListProps {

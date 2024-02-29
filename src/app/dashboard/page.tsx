@@ -10,6 +10,7 @@ import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { Overview } from "~/components/dashboard/overview";
 import { RecentSales } from "~/components/dashboard/recent-sales";
 import { BreadCrumbs } from "~/components/main-layout/bread-crumbs";
+import { env } from "~/env";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -110,6 +111,7 @@ export default async function DashboardPage() {
                   <RecentSales />
                 </CardContent>
               </Card>
+              {env.DISCORD_CLIENT_ID}
             </div>
           </TabsContent>
         </Tabs>

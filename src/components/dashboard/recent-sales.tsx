@@ -7,7 +7,7 @@ export async function RecentSales() {
   return (
     <div className="space-y-8">
       {myAuctions.map((item) => (
-        <Link href={`/auction/${item.id}`}>
+        <Link href={`/auction/${item.id}`} key={item.id}>
           <div className="flex items-center">
             <div className="ml-4 space-y-1">
               <p className="text-sm font-medium leading-none">{item.title}</p>
