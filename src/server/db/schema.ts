@@ -55,7 +55,6 @@ export const usersRelations = relations(users, ({ many }) => ({
   sessions: many(sessions),
   candidateProfiles: many(candidateProfiles),
   recruiterProfiles: many(recruiterProfiles),
-  auctions: many(auctions),
 }));
 
 export const accounts = mysqlTable(
@@ -133,11 +132,12 @@ export const candidateProfiles = mysqlTable(
 
 export const candidateProfilesRelations = relations(
   candidateProfiles,
-  ({ one }) => ({
+  ({ one, many }) => ({
     user: one(users, {
       fields: [candidateProfiles.userId],
       references: [users.id],
     }),
+    auctions: many(auctions),
   }),
 );
 
@@ -187,7 +187,10 @@ export const auctions = mysqlTable(
 );
 
 export const auctionsRelations = relations(auctions, ({ one }) => ({
-  user: one(users, { fields: [auctions.authorId], references: [users.id] }),
+  candidateProfile: one(candidateProfiles, {
+    fields: [auctions.authorId],
+    references: [candidateProfiles.id],
+  }),
 }));
 
 export const offers = mysqlTable(

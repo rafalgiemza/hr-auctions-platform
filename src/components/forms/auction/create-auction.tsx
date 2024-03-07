@@ -9,6 +9,7 @@ import { api } from "~/trpc/react";
 import { useToast } from "~/components/ui/use-toast";
 import { Input } from "~/components/ui/input";
 import { useRouter } from "next/navigation";
+import { Error } from "~/components/shared/forms/error";
 
 const schema = z.object({
   title: z.string().min(4),
@@ -19,11 +20,12 @@ const schema = z.object({
 type FormFields = z.infer<typeof schema>;
 
 interface CreateAuctionProps {
+  userProfileId: string;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export function CreateAuction(props: CreateAuctionProps) {
-  const { setOpen } = props;
+  const { setOpen, userProfileId } = props;
   const { toast } = useToast();
   const router = useRouter();
 
@@ -48,7 +50,7 @@ export function CreateAuction(props: CreateAuctionProps) {
 
   const onSubmit: SubmitHandler<FormFields> = async (data) => {
     try {
-      createAuction.mutate(data);
+      createAuction.mutate({ ...data, userProfileId });
     } catch (error) {
       toast({
         title: "Something goes wrong :(",
@@ -60,21 +62,18 @@ export function CreateAuction(props: CreateAuctionProps) {
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-2">
       <Input {...register("title")} placeholder="Title" />
-      {errors.title && (
-        <div className="text-red-500">{errors.title.message}</div>
-      )}
+      <Error field={errors.title} />
+
       <Textarea
         {...register("description")}
         placeholder="Description"
         rows={5}
       />
-      {errors.description && (
-        <div className="text-red-500">{errors.description.message}</div>
-      )}
+      <Error field={errors.description} />
+
       <Input {...register("salary")} placeholder="Salary" />
-      {errors.salary && (
-        <div className="text-red-500">{errors.salary.message}</div>
-      )}
+      <Error field={errors.salary} />
+
       <Button type="submit" disabled={isSubmitting}>
         {isSubmitting ? "Creating..." : `Create auction`}
       </Button>

@@ -46,6 +46,7 @@ export const auctionRouter = createTRPCRouter({
         title: z.string().min(1),
         description: z.string().min(1),
         salary: z.string(),
+        userProfileId: z.string(),
       }),
     )
     .mutation(async ({ ctx, input }) => {
@@ -53,7 +54,7 @@ export const auctionRouter = createTRPCRouter({
         title: input.title,
         description: input.description,
         salary: input.salary,
-        authorId: ctx.session.user.id,
+        authorId: input.userProfileId,
       });
     }),
 });
