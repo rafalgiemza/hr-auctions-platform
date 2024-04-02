@@ -1,16 +1,13 @@
 import type { Metadata } from "next";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "~/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "~/components/ui/card";
 import { Tabs, TabsContent } from "~/components/ui/tabs";
 import { Overview } from "~/components/dashboard/overview";
-import { RecentSales } from "~/components/dashboard/recent-sales";
+import { MyAuctions } from "~/components/dashboard/my-auctions";
 import { BreadCrumbs } from "~/components/main-layout/bread-crumbs";
-import { env } from "~/env";
+import { getServerAuthSession } from "~/server/auth";
+import { CreateAccountCTA } from "~/components/create-account-cta/create-account-cta";
+import { api } from "~/trpc/server";
+import { CreateProfileCTA } from "~/components/create-profile-cta/create-profile-cta";
 
 export const metadata: Metadata = {
   title: "Dashboard",
@@ -18,6 +15,31 @@ export const metadata: Metadata = {
 };
 
 export default async function DashboardPage() {
+  const session = await getServerAuthSession();
+
+  if (!session) {
+    return (
+      <div className="flex justify-center">
+        <CreateAccountCTA />
+      </div>
+    );
+  }
+
+  const specialist = await api.candidateProfile.getMyProfiles.query();
+  const headhunter = await api.recruiterProfile.getMyProfiles.query();
+
+  const noProfiles =
+    specialist?.candidateProfiles.length === 0 &&
+    headhunter.at(0)?.recruiterProfiles.length === 0;
+
+  if (noProfiles) {
+    return (
+      <div className="flex justify-center">
+        <CreateProfileCTA />
+      </div>
+    );
+  }
+
   return (
     <>
       <div className="flex-1 space-y-4 p-8 pt-6">
@@ -108,10 +130,9 @@ export default async function DashboardPage() {
                   <CardTitle>My auctions</CardTitle>
                 </CardHeader>
                 <CardContent>
-                  <RecentSales />
+                  <MyAuctions />
                 </CardContent>
               </Card>
-              {env.DISCORD_CLIENT_ID}
             </div>
           </TabsContent>
         </Tabs>

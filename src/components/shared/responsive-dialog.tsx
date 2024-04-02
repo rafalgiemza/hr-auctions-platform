@@ -52,15 +52,14 @@ export function ResponsiveDialog(props: ResponsiveDialogProps) {
             {title}
           </Button>
         </DialogTrigger>
-        <Card>
-          <DialogContent className="sm:max-w-[425px]">
-            <DialogHeader>
-              <DialogTitle>{title}</DialogTitle>
-              <DialogDescription>{description}</DialogDescription>
-            </DialogHeader>
-            {children}
-          </DialogContent>
-        </Card>
+
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle>{title}</DialogTitle>
+            <DialogDescription>{description}</DialogDescription>
+          </DialogHeader>
+          {children}
+        </DialogContent>
       </Dialog>
     );
   }

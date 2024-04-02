@@ -20,8 +20,8 @@ interface CandidateProfileProps {
   }[];
 }
 
-export const CandidateProfile = (props: { data: CandidateProfileProps[] }) => {
-  const user = props.data.at(0);
+export const CandidateProfile = (props: { data: CandidateProfileProps }) => {
+  const user = props.data;
 
   if (!user) return null;
 

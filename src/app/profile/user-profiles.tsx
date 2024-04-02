@@ -23,7 +23,7 @@ export const UserProfiles = async () => {
           value="specialist"
           className="border-none p-0 outline-none"
         >
-          <CandidateProfile data={specialist} />
+          {specialist && <CandidateProfile data={specialist} />}
         </TabsContent>
         <TabsContent
           value="headhunter"

@@ -20,12 +20,12 @@ export const Wrapper = async ({ children }: PropsWithChildren) => {
           className="hidden dark:block"
         /> */}
       </div>
-      <div className="grid grid-cols-[minmax(150px,_200px)_1fr_300px] gap-x-4 border-t bg-background">
+      <div className="grid h-screen grid-cols-[minmax(150px,_200px)_1fr_300px] gap-x-4 border-t bg-background ">
         <Sidebar />
         <div className="border-l">
           <div className="h-full px-4 py-6 lg:px-8">{children}</div>
         </div>
-        <aside className="border p-4">Partners placeholder</aside>
+        <aside className="border-l p-4">Partners placeholder</aside>
       </div>
     </>
   );

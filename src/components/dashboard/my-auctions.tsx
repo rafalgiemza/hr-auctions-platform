@@ -1,8 +1,11 @@
 import Link from "next/link";
 import { api } from "~/trpc/server";
 
-export async function RecentSales() {
+export async function MyAuctions() {
   const myAuctions = await api.auction.getAllMyAuctions.query();
+  console.log("🚀 ~ MyAuctions ~ myAuctions:", myAuctions);
+
+  if (myAuctions.length === 0) return "No auctions yet...";
 
   return (
     <div className="space-y-8">

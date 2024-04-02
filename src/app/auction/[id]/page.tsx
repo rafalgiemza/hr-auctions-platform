@@ -11,6 +11,8 @@ interface AuctionPagePros {
 export default async function AuctionPage({ params }: AuctionPagePros) {
   const auction = await api.auction.auctionById.query(params.id);
   const offers = await api.offer.getAllOffersForAuction.query(params.id);
+  const headhunter = await api.recruiterProfile.getMyProfiles.query();
+  const haveRecruiterProfile = headhunter.at(0)?.recruiterProfiles.length !== 0;
 
   if (!auction) {
     return null;
@@ -20,7 +22,7 @@ export default async function AuctionPage({ params }: AuctionPagePros) {
     <div className="flex-1 space-y-4 p-8 pt-6">
       <BreadCrumbs items={["Auction"]} />
       <AuctionCard auction={auction} />
-      <CreateBidBtn auctionId={auction.id} />
+      {haveRecruiterProfile && <CreateBidBtn auctionId={auction.id} />}
       <OfferList offers={offers} />
     </div>
   );

@@ -17,6 +17,10 @@ interface Auction {
 export async function AuctionList() {
   const auctions = await api.auction.getAll.query();
 
+  if (auctions.length === 0) {
+    return <>No auctions yet...</>;
+  }
+
   return (
     <div className="grid gap-4 md:grid-cols-2 ">
       {auctions.map((auction) => (
